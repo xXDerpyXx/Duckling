@@ -3,16 +3,16 @@
 (import-namespace kit)
 (import-namespace interface)
 
-(include "langauge-model/src/interface/header")
+(include "ai/src/interface/header")
 
 (require! Discord : "discord.js",
           (lit format)  : "./libraries/format.js",
           ;;markov  : "./libraries/cage.js",
-          ai "langauge-model"
+          'ai
 
-          (lit Interface)     : "langauge-model/lib/interface.js",
+          (lit Interface)     : "ai/lib/interface.js",
 
-          (lit Tree-map)     : "langauge-model/lib/tree",
+          (lit Tree-map)     : "ai/lib/tree",
           (lit Event-emitter) : "events",
 
           token : "./../token.js",
