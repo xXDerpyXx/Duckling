@@ -1,0 +1,16 @@
+(def-interface Channel-system ()
+  (def find ([server channel])
+    (pipe
+     client.guilds
+     (.find  (is-named server))
+     (get 'channels)
+     (.find (is-named channel)))))
+
+(def-interface Channel (pair )
+  (gett guild-name (first this.pair))
+  (gett channel-name (second this.pair))
+
+  (state Duckling.state)
+
+  (def join (pair u)
+    (task (assign u.channel pair) u)))

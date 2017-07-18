@@ -1,0 +1,31 @@
+
+(require! Discord : "discord.js",
+          (lit format (m-word-list make-word-list))  : "./libraries/format.js",
+          ;;markov  : "./libraries/cage.js",
+          'ai
+
+          (lit Interface)     : "ai/lib/interface.js",
+
+          (lit Tree-map)     : "ai/lib/tree",
+          (lit Event-emitter) : "events",
+
+          token : "./../token.js",)
+
+(def-curried is-named (name v)
+  (= v.name name))
+
+(var tree-map (create Tree-map))
+
+(include "./async")
+
+(var Model (create ai.Model))
+
+;; (def build ()
+
+;;   (var (lit inherits init) this)
+;;   (extend  inherits this)
+;;   (def this.init ()
+;;     (.call init this (dots arguments))
+;;     (.call  inherits.init this (dots arguments))))
+
+(var client (new Discord.Client))

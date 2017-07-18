@@ -1,0 +1,7 @@
+
+(macro task (...body) `(assign this.state (then  this.state state
+
+                                                 (print "enquing task" (quote (scoped ...@body)))
+                                                 ...@body)))
+
+(macro wait (t ...body) `(make-promise (set-timeout (-> (success (scoped ...@body))) @t))) 

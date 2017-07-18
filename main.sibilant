@@ -1,0 +1,80 @@
+
+(include "kit/macros")
+(import-namespace kit)
+(include "kit/header")
+
+
+(include "ai/src/interface/header")
+
+(import-namespace interface)
+
+(include "./header")
+(include "./Duckling.sibilant")
+(include "./channel")
+(print Duckling.state)
+
+(print Channel.state)
+(var wpm 150 )
+(var wc 100)
+
+
+;; (what Duckling 'reads Duckling 'thinks)
+;; (what Duckling 'thinks Duckling 'remembers)
+;; (what Duckling 'remembers Duckling (also forgets))
+
+;; (sometimes Duckling 'thinks (about 'emotion ))
+;; (sometimes Duckling 'alks (about 'anything ))
+
+(.init Duckling)
+
+(macro what (noun verb target response)
+       `(.on @noun @verb (=> ((dots args)) (.call (get @target @response) @target (dots args)))))
+(what client 'message Duckling 'reads)
+
+(what Duckling 'reads, Duckling 'remembers)
+(what Duckling 'remembers, Duckling 'thinks)
+(what Duckling 'thinks Duckling 'writes)
+
+(.on Duckling 'reads (aprint "duckling has read"))
+(.on Duckling 'remembers (aprint "duckling is remembering a fact"))
+(.on Duckling 'thinks (aprint "duckling is thinking about somthing"))
+(.on Duckling 'writes (aprint "duckling has written"))
+
+(print (.likelyhood Duckling.brain [ 'wee null])
+       (.likelyhood Duckling.brain [ 'wee null])
+       (.likelyhood Duckling.brain [ null null])
+       (.likelyhood Duckling.brain [ 'wee 'wee])
+       )
+
+;; ;; (response-model
+;; ;;  (.sometimes Duckling
+;; ;;              (.thinks (.about Everything
+;; ;;                               (.recent History (.because Someone "brought it up"))
+;; ;;                               (.distant Memories (.because They "were reminded"))
+;; ;;                               )
+;; ;;                       (.about ['recent 'history] (.because Someone ['brought 'it 'up]))
+;; ;;                       (.about ['distant 'memories] (.they .were 'reminded)))))
+;; (sometimes (what Duckling 'remembers ))
+
+;; ;; (sometimes Duckling (.thinks .about ['recent 'history]
+;; ;;                              (.because Someone ['brought 'it 'up])
+;; ;;                              )
+;; ;;            )
+
+;; ;;(sometimes Duckling 'thinks (about ['distant 'memories])) 
+
+;; (sometimes Duckling 'thinks (about ['everything] ))
+;; (sometimes Duckling 'writes (about ['everything] ))
+
+;; (what Duckling 'writes  Everyone 'reads)
+
+;; (.join Channel ["Error log" "bot-tests"] Duckling)
+
+;; (say "I like potatos" Duckling)
+
+
+;; (print Duckling.*channel)
+
+;; ;; (pipe 
+;; ;;       (.then  )
+;; ;;       (.catch (aprint "fail")))

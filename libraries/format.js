@@ -20,6 +20,7 @@ function format(input) {
 
     return input;}
 
+var debugging = false;
 function debug() {if(debugging) console.log(...arguments);}
 
 function splitSentences(input) {
@@ -56,7 +57,7 @@ function randomElement(arr) {return Math.floor (Math.random() * tableData[currWo
 module.exports.mWordList = function mWordList(input)
 {console.log("[MARKOV] WORD LIST MAKING FOR NON-MARKOV FILES");
 
- list = splitSentences(input);
+ var list = splitSentences(input);
  var localList = [];
 
  for (var k in list) {var t = list[k].split(" "); locallist = localList.concat(t);}
@@ -72,12 +73,11 @@ function replaceAll(s, o)
 const maybe = (c,f,a) => c(a) ? f(a) : a;
 
 module.exports.format = function formatOutput(output)
-{return replaceAll
- (maybe((o) => !o.includes(/[.?!]/),
-        (o) => o += ".",
-        output.replace(/\s([!?.,])/ ,"$1"))
-  [["duckling", "I"],
-   ["Duckling", "I"],
-   ["I is", "I am"],
-   [" I.", " me."],
-   [" I*.", " me*."]]);};
+{
+    return replaceAll (maybe((o) => !o.includes(/[.?!]/), (o) => o += ".", output.replace(/\s([!?.,])/ ,"$1")),
+                       [["duckling", "I"],
+                        ["Duckling", "I"],
+                        ["I is", "I am"],
+                        [" I.", " me."],
+                        [" I*.", " me*."]]);
+};
