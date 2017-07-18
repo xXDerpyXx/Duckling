@@ -1,14 +1,11 @@
 {
-
-    "name":"Duckling",
-    "version":"2.0.1",
-
-    "dependencies":{
+    "name": "Duckling",
+    "version": "2.0.1",
+    "dependencies": {
         "ramda": "^0.22.1",
         "source-map-support": "^0.4.11",
         "kit": "https://bitbucket.org/kettlelogic/kit.git",
         "sibilant": "https://bitbucket.org/kettlelogic/sibilant.git",
-        "ai":"https://github.com/riatzukiza/language-model.git"
-
+        "ai": "https://github.com/riatzukiza/language-model.git"
     }
 }
