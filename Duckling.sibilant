@@ -1,6 +1,7 @@
+(include "kit/macros")
+(import-namespace kit)
 (include "kit/header")
 
-(import-namespace kit)
 (import-namespace interface)
 
 (include "ai/src/interface/header")
