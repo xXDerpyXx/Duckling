@@ -39,19 +39,35 @@
 ;;        (.likelyhood Duckling.brain [ 'wee 'wee])
 ;;        )
 (require! 'fs )
-(fs.read-file "./safeMessages.log" "utf8"
-              (=> (err d)
+(pipe (.load Storage "./models/duckling-core")
+      (then brain
 
-                  (.init Duckling)
-                  (var st (.split d "/"))
-                  (.for-each st (=> (s) (.train Duckling.brain 5 (.split s (regex "\\s")))))
+            (print "brain loaded successfully")
+            (assign Duckling.brain brain)
+            (.init Duckling)
 
-                  (what client 'message Duckling 'reads)
+            (what client 'message Duckling 'reads)
 
-                  (what Duckling 'reads, Duckling 'remembers)
-                  (what Duckling 'remembers, Duckling 'thinks)
-                  (what Duckling 'thinks Duckling 'writes)
-                  ))
+            (what Duckling 'reads, Duckling 'remembers)
+            (what Duckling 'remembers, Duckling 'thinks)
+            (what Duckling 'thinks Duckling 'writes))
+      (catch (print "couldn't load existing brain, building new one")
+        (print e)
+        (fs.read-file "./safeMessages.log" "utf8"
+                      (=> (err d)
+
+                          (.init Duckling)
+                          (var st (.split d "/"))
+                          (.for-each st (=> (s) (.train Duckling.brain 5 (.split s (regex "\\s")))))
+
+                          (what client 'message Duckling 'reads)
+
+                          (what Duckling 'reads, Duckling 'remembers)
+                          (what Duckling 'remembers, Duckling 'thinks)
+                          (what Duckling 'thinks Duckling 'writes)
+                          ))
+        ))
+
 
 ;; ;; (response-model
 ;; ;;  (.sometimes Duckling
@@ -85,3 +101,5 @@
 ;; ;; (pipe 
 ;; ;;       (.then  )
 ;; ;;       (.catch (aprint "fail")))
+
+(print Duckling.context)

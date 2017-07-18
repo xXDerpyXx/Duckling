@@ -41,7 +41,6 @@
        (assign this.*channel [msg.guild.name msg.channel.name])
        (var t (.replace msg.content
                         (regex "[.!?]" )
-                        " <s> "
                         ))
        (var o (.split t (regex "\\s")))
 
@@ -83,36 +82,36 @@
                                        (.emit this 'thinks this.response)
                                      (assign this.response []))
 
-                                   (if (or (< r.likelyhood 0.9)
-                                           (.some ["Duckling" "duckling" "you" "your" "you're" ]
-                                                  (=> (name)
-                                                      (= name token)
+                                   (do
 
-                                                      (.push this.response "I"))))
+                                    (.push this.response token)
+                                    (if (or (< r.likelyhood 0.1)
+                                            (.some ["Duckling" "duckling" "you" "your" "you're" ]
+                                                   (=> (name) (= name token))))
 
-                                       (do (print "thinking hard..." )
-                                           (.push this.response token)
-                                         (.emit this 'remembers [model words] )))))
+                                        (do (print "thinking hard..." )
+                                          (.emit this 'remembers [model words] ))))))
              (aprint "lost a thought...."))))
 
   (def-generic writes ( (s []) channel)
 
     (var t (+ (.join s " ") "."))
     (task
-     (then channel c
+     (.catch (then channel c
 
-           (unless (= t ".")
+            (unless (= t ".")
 
-             c.startTyping()
+              c.startTyping()
 
-             (c.send t)
+              (c.send t)
 
-             (print "[DUCKLING] "  t)
-             (c.stopTyping true)
-             (.emit this 'writes t)
-             (pipe (.save Storage "./models/duckling-core" this.brain)
-                   (.then (aprint "saved duckling"))
-                   (.catch (aprint "failed to save duckling"))))))))
+              (print "[DUCKLING] "  t)
+              (c.stopTyping true)
+              (.emit this 'writes t)
+              (pipe (.save Storage "./models/duckling-core" this.brain)
+                    (.then (aprint "saved duckling"))
+                    (.catch (aprint "failed to save duckling")))))
+             (aprint "failed to write")))))
 
 
 
