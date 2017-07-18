@@ -37,7 +37,7 @@
 
      (print "reading")
 
-     (unless (= msg.author.name "Duckling (Error)")
+     (unless (= msg.author.name client.user.username)
        (assign this.*channel [msg.guild.name msg.channel.name])
        (var t (.replace msg.content
                         (regex "[.!?]" )
