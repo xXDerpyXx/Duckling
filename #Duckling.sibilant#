@@ -1,0 +1,111 @@
+(include "kit/header")
+
+(import-namespace kit)
+(import-namespace interface)
+
+(include "langauge-model/src/interface/header")
+
+(require! Discord : "discord.js",
+          (lit format)  : "./libraries/format.js",
+          ;;markov  : "./libraries/cage.js",
+          ai "langauge-model"
+
+          (lit Interface)     : "langauge-model/lib/interface.js",
+
+          (lit Tree-map)     : "langauge-model/lib/tree",
+          (lit Event-emitter) : "events",
+
+          token : "./../token.js",
+          )
+(var tree-map (create Tree-map))
+
+(macro task (...body) `(assign this.state (then  this.state state
+
+                                                   (print "enquing task" (quote (scoped ...@body)))
+                                                   ...@body)))
+
+(macro wait (t ...body) `(make-promise (set-timeout (-> (success (scoped ...@body))) @t))) 
+
+(var Model (create ai.Model))
+
+;; (def build ()
+
+;;   (var (lit inherits init) this)
+;;   (extend  inherits this)
+;;   (def this.init ()
+;;     (.call init this (dots arguments))
+;;     (.call  inherits.init this (dots arguments))))
+
+(var client (new Discord.Client))
+
+(def-curried is-named (name v)
+  (= v.name name))
+
+(def-interface Channel-system ()
+  (def find ([server channel])
+    (pipe
+     client.guilds
+     (.find  (is-named server))
+     (get 'channels)
+     (.find (is-named channel)))))
+
+(print (.find Channel-system ["Error log" "bot-tests"]))
+
+
+
+(print (.find client.guilds (=> (v) (= v.name "Error log"))))
+
+(print client.guilds)
+(print client)
+(var wpm 150 )
+(var wc 100)
+
+(def-interface Duckling ()
+  (events (new Event-emitter))
+
+  (client client)
+  (token token)
+
+  (sett channel keys (task (assign this.*channel keys)))
+  (gett channel (task (.find Channel-system this.*channel)))
+
+  (state (.then (.login client token)
+                (aprint "login success")
+                (athrow "login failed")))
+
+  (def-generic heard ())
+
+  (def-generic said ( (s []) channel)
+
+
+    (var t (.join s "."))
+    (task
+     (then channel c
+           c.startTyping()
+
+           (c.send t)
+
+           (print "[DUCKLING] "  t)
+           (c.stopTyping true)))))
+(def-interface Channel (pair )
+  (gett guild-name (first this.pair))
+  (gett channel-name (second this.pair))
+
+  (gett state Duckling.state)
+
+  (def join (pair u)
+    (assign u.channel pair) u))
+
+(def-curried say (t noun)
+  (.said noun [t]))
+
+
+(.join Channel ["Error log" "bot-tests"] Duckling)
+
+(say "I like potatos" Duckling)
+
+(print Duckling.*channel)
+
+;; (pipe 
+;;       (.then  )
+;;       (.catch (aprint "fail")))

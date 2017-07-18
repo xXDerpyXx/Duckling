@@ -1,7 +1,7 @@
 
 
 (function(a, b, c) {
-  /* ../../../../node_modules/kit/inc/core/defs.sibilant:53:9 */
+  /* node_modules/kit/inc/core/defs.sibilant:53:9 */
 
   return foo(this);
 }).bind(this);
@@ -25,12 +25,12 @@ var is = {
    }
  };
 is.empty__QUERY = (function is$empty__QUERY$(value) {
-  /* is.empty? ../../../../node_modules/kit/inc/core/fp.sibilant:12:0 */
+  /* is.empty? node_modules/kit/inc/core/fp.sibilant:12:0 */
 
   return 0 === value.length;
 });
 var athrow = (function athrow$(errType, message) {
-  /* athrow ../../../../node_modules/kit/inc/core/fp.sibilant:14:0 */
+  /* athrow node_modules/kit/inc/core/fp.sibilant:14:0 */
 
   return () => {
   	
@@ -39,7 +39,7 @@ var athrow = (function athrow$(errType, message) {
   };
 });
 var getValueOf = (function getValueOf$(o) {
-  /* get-value-of ../../../../node_modules/kit/inc/core/fp.sibilant:17:0 */
+  /* get-value-of node_modules/kit/inc/core/fp.sibilant:17:0 */
 
   return o.getValue();
 });
@@ -54,19 +54,7 @@ var {
 
 
 (function(a, b, c) {
-  /* ../../../../node_modules/kit/inc/core/defs.sibilant:53:9 */
-
-  return foo(this);
-}).bind(this);
-
-
-;
-
-;
-
-
-(function(a, b, c) {
-  /* ../../../../node_modules/kit/inc/core/defs.sibilant:53:9 */
+  /* node_modules/kit/inc/core/defs.sibilant:53:9 */
 
   return foo(this);
 }).bind(this);
@@ -90,12 +78,12 @@ var is = {
    }
  };
 is.empty__QUERY = (function is$empty__QUERY$(value) {
-  /* is.empty? ../../../../node_modules/kit/inc/core/fp.sibilant:12:0 */
+  /* is.empty? node_modules/kit/inc/core/fp.sibilant:12:0 */
 
   return 0 === value.length;
 });
 var athrow = (function athrow$(errType, message) {
-  /* athrow ../../../../node_modules/kit/inc/core/fp.sibilant:14:0 */
+  /* athrow node_modules/kit/inc/core/fp.sibilant:14:0 */
 
   return () => {
   	
@@ -104,7 +92,7 @@ var athrow = (function athrow$(errType, message) {
   };
 });
 var getValueOf = (function getValueOf$(o) {
-  /* get-value-of ../../../../node_modules/kit/inc/core/fp.sibilant:17:0 */
+  /* get-value-of node_modules/kit/inc/core/fp.sibilant:17:0 */
 
   return o.getValue();
 });
@@ -177,7 +165,7 @@ var Duckling = Interface.define("Duckling", {
       return this.state = this.state.then((state) => {
       	
         console.log("enquing task", "(function() {\n" +
-        "  /* Duckling.sibilant:24:80 */\n" +
+        "  /* Duckling.sibilant:25:80 */\n" +
         "\n" +
         "  return this._channel = keys;\n" +
         "}).call(this)");
@@ -191,7 +179,7 @@ var Duckling = Interface.define("Duckling", {
       return this.state = this.state.then((state) => {
       	
         console.log("enquing task", "(function() {\n" +
-        "  /* Duckling.sibilant:24:80 */\n" +
+        "  /* Duckling.sibilant:25:80 */\n" +
         "\n" +
         "  return ChannelSystem.find(this._channel);\n" +
         "}).call(this)");
@@ -201,7 +189,7 @@ var Duckling = Interface.define("Duckling", {
     
    },
   state:client.login(token).then((function(b, ...others) {
-    /* ../../../../node_modules/kit/inc/console.sibilant:10:8 */
+    /* node_modules/kit/inc/console.sibilant:10:8 */
   
     console.log("login success", b, ...others);
     return b;
@@ -215,7 +203,7 @@ var Duckling = Interface.define("Duckling", {
       return this.state = this.state.then((state) => {
       	
         console.log("enquing task", "(function() {\n" +
-        "  /* Duckling.sibilant:24:80 */\n" +
+        "  /* Duckling.sibilant:25:80 */\n" +
         "\n" +
         "  return channel.then((c) => {\n" +
         "  	\n" +
