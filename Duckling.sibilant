@@ -78,21 +78,22 @@
      (assign this.context [(dots (rest this.context)) token])
 
      (print "likelyhood" r.likelyhood)
-     (if (= null token)
-         (do (print "done thinking")
-             (.emit this 'thinks this.response)
-             (assign this.response []))
+     (.catch (.resolve Promise (if (= null token)
+                                   (do (print "done thinking")
+                                       (.emit this 'thinks this.response)
+                                     (assign this.response []))
 
-         (if (or (< r.likelyhood 0.9)
-                 (.some ["Duckling" "duckling" "you" "your" "you're" ]
-                        (=> (name)
-                            (= name token)
+                                   (if (or (< r.likelyhood 0.9)
+                                           (.some ["Duckling" "duckling" "you" "your" "you're" ]
+                                                  (=> (name)
+                                                      (= name token)
 
-                            (.push this.response "I"))))
+                                                      (.push this.response "I"))))
 
-             (do (print "thinking hard..." )
-               (.push this.response token)
-                 (.emit this 'remembers [model words] ))))))
+                                       (do (print "thinking hard..." )
+                                           (.push this.response token)
+                                         (.emit this 'remembers [model words] )))))
+             (aprint "lost a thought...."))))
 
   (def-generic writes ( (s []) channel)
 
