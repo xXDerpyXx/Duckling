@@ -11,12 +11,12 @@
 (include "./header")
 (include "./Duckling.sibilant")
 (include "./channel")
-(print Duckling.state)
 
-(print Channel.state)
 (var wpm 150 )
 (var wc 100)
 
+(print Duckling.state)
+(print (Duckling.brain.random-sequence 50))
 
 ;; (what Duckling 'reads Duckling 'thinks)
 ;; (what Duckling 'thinks Duckling 'remembers)
@@ -24,17 +24,10 @@
 
 ;; (sometimes Duckling 'thinks (about 'emotion ))
 ;; (sometimes Duckling 'alks (about 'anything ))
-()
 
-(.init Duckling)
 
 (macro what (noun verb target response)
        `(.on @noun @verb (=> ((dots args)) (.call (get @target @response) @target (dots args)))))
-(what client 'message Duckling 'reads)
-
-(what Duckling 'reads, Duckling 'remembers)
-(what Duckling 'remembers, Duckling 'thinks)
-(what Duckling 'thinks Duckling 'writes)
 
 ;; (.on Duckling 'reads (aprint "duckling has read"))
 ;; (.on Duckling 'remembers (aprint "duckling is remembering a fact"))
@@ -49,8 +42,17 @@
 (require! 'fs )
 (fs.read-file "./safeMessages.log" "utf8"
               (=> (err d)
+
+                  (.init Duckling)
                   (var st (.split d "/"))
-                  (.for-each st (=> (s) (.train Duckling.brain 2 (.split s (regex "\\s")))))))
+                  (.for-each st (=> (s) (.train Duckling.brain 5 (.split s (regex "\\s")))))
+
+                  (what client 'message Duckling 'reads)
+
+                  (what Duckling 'reads, Duckling 'remembers)
+                  (what Duckling 'remembers, Duckling 'thinks)
+                  (what Duckling 'thinks Duckling 'writes)
+                  ))
 
 ;; ;; (response-model
 ;; ;;  (.sometimes Duckling

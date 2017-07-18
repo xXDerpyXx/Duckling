@@ -1,8 +1,10 @@
 
-(var state  (.then (.login client token) (aprint "login success") (athrow "login failed")))
+(var state  (.then (.login client token) (aprint "login success") (athrow Error "login failed")))
 (var brain (Model))
+
 (def-curried say (t noun)
   (.writes noun [t]))
+
 (macro def-actor (name args ...body)
        )
 (def-interface Short-term-memory ())
@@ -22,7 +24,7 @@
 
 
   (sett channel keys (task (assign this.*channel keys)))
-  (gett channel (task (.find Channel-system this.*channel)))
+  (gett channel (task (print "getting channel" this.*channel)(.find Channel-system this.*channel)))
 
 
   (state state)
@@ -32,6 +34,8 @@
     "takes data and introduces it to ducklings brain"
 
     (task
+
+     (print "reading")
 
      (unless (= msg.author.name "Duckling (Error)")
        (assign this.*channel [msg.guild.name msg.channel.name])
@@ -44,48 +48,64 @@
 
        (.emit this 'reads o)
 
-       (if (.includes t "!duckling")
-           (.writes this (.random-sequence this.brain 20))))))
+       ;; (if (.includes t "duckling")
+       ;;         (var r (.random-sequence this.brain 20))
+
+       ;;         (do (print "[duckling was mentioned]" r)
+       ;;         (.writes this )))
+       )))
 
   (def-generic remembers (word-list)
     (task
 
-     (.train this.brain 2 word-list)
+     (.train this.brain 5 word-list)
 
      (.degrade this.brain (get (.random this.brain) 'seq))
 
-     (.emit this 'remembers this.brain )))
+     (.emit this 'remembers [this.brain word-list] )))
 
   (response [])
-  (context [null])
-  (def-generic thinks (model response context)
+  (context [null null null null])
+
+  (def thinks ([model words] )
+    (print "attempting to think")
 
     (task
+     ;;(unless (.some words include-ducklings-name))
 
-     (var r (.random (.given model context)))
-     (var e (get r 'token))
-     (assign this.context [(dots (rest context)) e])
-     (if (= null e)
-         (do (.emit this 'thinks response)
+     (var r (.random (.given model this.context)))
+     (var token (get r 'token))
+     (assign this.context [(dots (rest this.context)) token])
+
+     (print "likelyhood" r.likelyhood)
+     (.push this.response token)
+     (if (= null token)
+         (do (print "done thinking")
+             (.emit this 'thinks this.response)
              (assign this.response []))
-         (> r.likelyhood 0.05)
-         (.thinks this model)
 
-         (.push response e))))
+         (if (or (< r.likelyhood 0.7)
+                 (.some ["Duckling" "duckling" "you" "your" "you're" ]
+                        (=> (name) (= name token))))
+
+             (do (print "thinking hard..." )
+                 (.emit this 'remembers [model words] ))))))
 
   (def-generic writes ( (s []) channel)
 
-    (var t (.join s " "))
+    (var t (+ (.join s " ") "."))
     (task
      (then channel c
 
-           c.startTyping()
+           (unless (= t ".")
 
-           (c.send t)
+             c.startTyping()
 
-           (print "[DUCKLING] "  t)
-           (c.stopTyping true)
-           (.emit this 'writes t)))))
+             (c.send t)
+
+             (print "[DUCKLING] "  t)
+             (c.stopTyping true)
+             (.emit this 'writes t))))))
 
 
 
@@ -99,8 +119,6 @@
 ;; (print client.guilds)
 ;; (print client)
 
-
-(say "I am too stupid to talk with out a puppetteer right now" Duckling)
 
 
 
