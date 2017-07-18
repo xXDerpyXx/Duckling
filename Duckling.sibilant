@@ -1,7 +1,5 @@
 
-(var state  (.then (.login client token) (aprint "login success") (athrow "login failed"))
-
-     )
+(var state  (.then (.login client token) (aprint "login success") (athrow "login failed")))
 (var brain (Model))
 (def-curried say (t noun)
   (.writes noun [t]))
@@ -33,7 +31,6 @@
   (def-generic reads (msg)
     "takes data and introduces it to ducklings brain"
 
-    (print "duckling is reading")
     (task
 
      (unless (= msg.author.name "Duckling (Error)")
@@ -44,7 +41,6 @@
                         ))
        (var o (.split t (regex "\\s")))
 
-       (print "reading" t)
 
        (.emit this 'reads o)
 
@@ -53,34 +49,36 @@
 
   (def-generic remembers (word-list)
     (task
+
      (.train this.brain 2 word-list)
+
+     (.degrade this.brain (get (.random this.brain) 'seq))
+
      (.emit this 'remembers this.brain )))
 
   (response [])
-  (context ['wee])
+  (context [null])
   (def-generic thinks (model response context)
 
     (task
 
-     (print "context of thought" context )
-     (print "incomplete thought" response)
-     (var e (get (.random (.given model context))
-                 'token))
-     (print "e" e)
+     (var r (.random (.given model context)))
+     (var e (get r 'token))
      (assign this.context [(dots (rest context)) e])
      (if (= null e)
          (do (.emit this 'thinks response)
              (assign this.response []))
+         (> r.likelyhood 0.05)
+         (.thinks this model)
+
          (.push response e))))
 
   (def-generic writes ( (s []) channel)
-    (print "writes" s)
 
     (var t (.join s " "))
     (task
      (then channel c
 
-           (print "duckling is writing" t "to" c)
            c.startTyping()
 
            (c.send t)

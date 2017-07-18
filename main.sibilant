@@ -24,6 +24,7 @@
 
 ;; (sometimes Duckling 'thinks (about 'emotion ))
 ;; (sometimes Duckling 'alks (about 'anything ))
+()
 
 (.init Duckling)
 
@@ -35,16 +36,21 @@
 (what Duckling 'remembers, Duckling 'thinks)
 (what Duckling 'thinks Duckling 'writes)
 
-(.on Duckling 'reads (aprint "duckling has read"))
-(.on Duckling 'remembers (aprint "duckling is remembering a fact"))
-(.on Duckling 'thinks (aprint "duckling is thinking about somthing"))
-(.on Duckling 'writes (aprint "duckling has written"))
+;; (.on Duckling 'reads (aprint "duckling has read"))
+;; (.on Duckling 'remembers (aprint "duckling is remembering a fact"))
+;; (.on Duckling 'thinks (aprint "duckling is thinking about somthing"))
+;; (.on Duckling 'writes (aprint "duckling has written"))
 
-(print (.likelyhood Duckling.brain [ 'wee null])
-       (.likelyhood Duckling.brain [ 'wee null])
-       (.likelyhood Duckling.brain [ null null])
-       (.likelyhood Duckling.brain [ 'wee 'wee])
-       )
+;; (print (.likelyhood Duckling.brain [ 'wee null])
+;;        (.likelyhood Duckling.brain [ 'wee null])
+;;        (.likelyhood Duckling.brain [ null null])
+;;        (.likelyhood Duckling.brain [ 'wee 'wee])
+;;        )
+(require! 'fs )
+(fs.read-file "./safeMessages.log" "utf8"
+              (=> (err d)
+                  (var st (.split d "/"))
+                  (.for-each st (=> (s) (.train Duckling.brain 2 (.split s (regex "\\s")))))))
 
 ;; ;; (response-model
 ;; ;;  (.sometimes Duckling
