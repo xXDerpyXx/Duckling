@@ -16,7 +16,6 @@
 (var wc 100)
 
 (print Duckling.state)
-(print (Duckling.brain.random-sequence 50))
 
 ;; (what Duckling 'reads Duckling 'thinks)
 ;; (what Duckling 'thinks Duckling 'remembers)

@@ -18,7 +18,8 @@
 
 (include "./async")
 
-(var Model (create ai.Model))
+(var Model (create ai.Model)
+     Storage ai.Storage)
 
 ;; (def build ()
 
