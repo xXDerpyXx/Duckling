@@ -1,266 +1,52 @@
+var state = client.login(token).then(aprint("login success"), athrow(Error, "login failed"));
+var brain = Model();
+defCurried(say, t(noun), noun.writes([ t ]));
+defInterface(ShortTermMemory, null);
+defInterface(Messages, null);
+defInterface(NextResponse, null);
+defInterface(Duckling, null, extend(EventEmitter.prototype), init(EventEmitter.call(this)), client(client), token(token), brain(brain), sett(channel, keys, task(this._channel = keys;)), gett(channel, task(print("getting channel", this._channel), ChannelSystem.find(this._channel))), state(state), defGeneric(reads, msg(), "takes data and introduces it to ducklings brain", task(print("reading"), (function() {
+  if (!(msg.author.name === client.user.username)) {
+    this._channel = [ msg.guild.name, msg.channel.name ];
+    var t = msg.content.replace((new RegExp("[.!?]", undefined)));
+    var o = t.split((new RegExp("\\s", undefined)));
+    return this.emit("reads", o);
+  }
+}).call(this))), defGeneric(remembers, wordList(), task(this.brain.train(5, wordList), this.brain.degrade(this.brain.random().seq), this.emit("remembers", [ this.brain, wordList ]))), response([]), context([ null, null, null, null ]), var thinks = (function thinks$(model_words$1) {
+  /* thinks Duckling.sibilant:69:2 */
 
+  var model = model_words$1[0],
+      words = model_words$1[1];
 
-(function(a, b, c) {
-  /* node_modules/kit/inc/core/defs.sibilant:53:9 */
+  print("attempting to think", model.total);
+  return task(
+    var r = model.given(
+      this.context).random();
+    , var token = r.token;
+    , this.context = [ this.context.slice(1), token ];
+    , print("likelyhood", r.likelyhood)
+    , Promise.resolve((function() {
+    if (null === token) {
+      print("done thinking");
+      this.emit("thinks", this.response);
+      return this.response = [];
+    } else {
+      this.response.push(token);
+      return (function() {
+        if ((r.likelyhood < 0.1 || [ "Duckling", "duckling", "you", "your", "you're" ].some(=>(name(), name === token)))) {
+          print("thinking hard...");
+          return this.emit("remembers", [ model, words ]);
+        }
+      }).call(this).catch(aprint("borked"));
+    }
+  }).call(this)).catch(aprint("lost a thought....")));
 
-  return foo(this);
-}).bind(this);
-
-
-;
-
-;
-var Descriptions = {  };
-var R = require("ramda");
-var fmap = R.curry((f, a) => {
-	
-  return a.map(f);
-
-});
-var is = { 
-  string( v ){ 
-    
-      return typeof v === "string";
-    
-   }
- };
-is.empty__QUERY = (function is$empty__QUERY$(value) {
-  /* is.empty? node_modules/kit/inc/core/fp.sibilant:12:0 */
-
-  return 0 === value.length;
-});
-var athrow = (function athrow$(errType, message) {
-  /* athrow node_modules/kit/inc/core/fp.sibilant:14:0 */
-
-  return () => {
-  	
-    return (new errType(message));
-  
-  };
-});
-var getValueOf = (function getValueOf$(o) {
-  /* get-value-of node_modules/kit/inc/core/fp.sibilant:17:0 */
-
-  return o.getValue();
-});
-var { 
-  create,
-  extend,
-  mixin,
-  conditional,
-  cond,
-  partiallyApplyAfter
- } = require("kit/js/util");
-
-
-(function(a, b, c) {
-  /* node_modules/kit/inc/core/defs.sibilant:53:9 */
-
-  return foo(this);
-}).bind(this);
-
-
-;
-
-;
-var Descriptions = {  };
-var R = require("ramda");
-var fmap = R.curry((f, a) => {
-	
-  return a.map(f);
-
-});
-var is = { 
-  string( v ){ 
-    
-      return typeof v === "string";
-    
-   }
- };
-is.empty__QUERY = (function is$empty__QUERY$(value) {
-  /* is.empty? node_modules/kit/inc/core/fp.sibilant:12:0 */
-
-  return 0 === value.length;
-});
-var athrow = (function athrow$(errType, message) {
-  /* athrow node_modules/kit/inc/core/fp.sibilant:14:0 */
-
-  return () => {
-  	
-    return (new errType(message));
-  
-  };
-});
-var getValueOf = (function getValueOf$(o) {
-  /* get-value-of node_modules/kit/inc/core/fp.sibilant:17:0 */
-
-  return o.getValue();
-});
-var { 
-  create,
-  extend,
-  mixin,
-  conditional,
-  cond,
-  partiallyApplyAfter
- } = require("kit/js/util");
-var Discord = require("discord.js"),
-    { 
-  format
- } = require("./libraries/format.js"),
-    ai = require("ai"),
-    { 
-  Interface
- } = require("ai/lib/interface.js"),
-    { 
-  TreeMap
- } = require("ai/lib/tree"),
-    { 
-  EventEmitter
- } = require("events"),
-    token = require("./../token.js");
-var treeMap = create(TreeMap);
-var Model = create(ai.Model);
-var client = (new Discord.Client());
-var isNamed = R.curry((name, v) => {
-	
-  return v.name === name;
-
-});
-var ChannelSystem = Interface.define("ChannelSystem", { 
-  init(  ){ 
-    
-      
-      return this;
-    
-   },
-  find( [ server, channel ] ){ 
-    
-      return client.guilds.find(isNamed(server)).channels.find(isNamed(channel));
-    
-   }
- });
-console.log(ChannelSystem.find([ "Error log", "bot-tests" ]));
-console.log(client.guilds.find((v) => {
-	
-  return v.name === "Error log";
-
-}));
-console.log(client.guilds);
-console.log(client);
-var wpm = 150;
-var wc = 100;
-var Duckling = Interface.define("Duckling", { 
-  init(  ){ 
-    
-      
-      return this;
-    
-   },
-  events:(new EventEmitter()),
-  client:client,
-  token:token,
-  set channel( keys ){ 
-    
-      return this.state = this.state.then((state) => {
-      	
-        console.log("enquing task", "(function() {\n" +
-        "  /* Duckling.sibilant:25:80 */\n" +
-        "\n" +
-        "  return this._channel = keys;\n" +
-        "}).call(this)");
-        return this._channel = keys;
-      
-      });
-    
-   },
-  get channel(  ){ 
-    
-      return this.state = this.state.then((state) => {
-      	
-        console.log("enquing task", "(function() {\n" +
-        "  /* Duckling.sibilant:25:80 */\n" +
-        "\n" +
-        "  return ChannelSystem.find(this._channel);\n" +
-        "}).call(this)");
-        return ChannelSystem.find(this._channel);
-      
-      });
-    
-   },
-  state:client.login(token).then((function(b, ...others) {
-    /* node_modules/kit/inc/console.sibilant:10:8 */
-  
-    console.log("login success", b, ...others);
-    return b;
-  }), athrow("login failed")),
-  heard(  ){ 
-    
-   },
-  said( s = [],channel = this.channel ){ 
-    
-      var t = s.join(".");
-      return this.state = this.state.then((state) => {
-      	
-        console.log("enquing task", "(function() {\n" +
-        "  /* Duckling.sibilant:25:80 */\n" +
-        "\n" +
-        "  return channel.then((c) => {\n" +
-        "  	\n" +
-        "    c.startTyping();\n" +
-        "    c.send(t);\n" +
-        "    console.log(\"[DUCKLING] \", t);\n" +
-        "    return c.stopTyping(true);\n" +
-        "  \n" +
-        "  });\n" +
-        "}).call(this)");
-        return channel.then((c) => {
-        	
-          c.startTyping();
-          c.send(t);
-          console.log("[DUCKLING] ", t);
-          return c.stopTyping(true);
-        
-        });
-      
-      });
-    
-   }
- });
-var Channel = Interface.define("Channel", { 
-  init( pair = this.pair ){ 
-    
-      this.pair = pair;
-      return this;
-    
-   },
-  get guildName(  ){ 
-    
-      return this.pair[0];
-    
-   },
-  get channelName(  ){ 
-    
-      return this.pair[1];
-    
-   },
-  get state(  ){ 
-    
-      return Duckling.state;
-    
-   },
-  join( pair,u ){ 
-    
-      u.channel = pair;
-      return u;
-    
-   }
- });
-var say = R.curry((t, noun) => {
-	
-  return noun.said([ t ]);
-
-});
-Channel.join([ "Error log", "bot-tests" ], Duckling);
-say("I like potatos", Duckling);
-console.log(Duckling._channel);
+});, defGeneric(writes, s([])(channel), var t = (s.join(" ") + ".");, task(then(channel, c, (function() {
+  if (!(t === ".")) {
+    c.startTyping();
+    c.send(t);
+    print("[DUCKLING] ", t);
+    c.stopTyping(true);
+    this.emit("writes", t);
+    return Storage.save("./models/duckling-core", this.brain).then(aprint("saved duckling")).catch(aprint("failed to save duckling"));
+  }
+}).call(this)).catch(aprint("failed to write")))));
