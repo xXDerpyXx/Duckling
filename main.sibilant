@@ -26,7 +26,8 @@
 
 
 (macro what (noun verb target response)
-       `(.on @noun @verb (=> ((dots args)) (.call (get @target @response) @target (dots args)))))
+       `(.on @noun @verb (=> ((dots args))
+                             (.call (get @target @response) @target (dots args)))))
 
 ;; (.on Duckling 'reads (aprint "duckling has read"))
 ;; (.on Duckling 'remembers (aprint "duckling is remembering a fact"))
@@ -58,15 +59,9 @@
 
                           (.init Duckling)
                           (var st (.split d "/"))
-                          (.for-each st (=> (s) (.train Duckling.brain 5 (.split s (regex "\\s")))))
-
-                          (what client 'message Duckling 'reads)
-
-                          (what Duckling 'reads, Duckling 'remembers)
-                          (what Duckling 'remembers, Duckling 'thinks)
-                          (what Duckling 'thinks Duckling 'writes)
-                          ))
-        ))
+                          (.for-each
+                           st (#-> (.split s (regex "\\s")) Duckling.remembers)
+                           (=> (s) (Duckling.remembers (.split s (regex "\\s")))))))))
 
 
 ;; ;; (response-model

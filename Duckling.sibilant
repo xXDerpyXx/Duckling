@@ -1,9 +1,12 @@
 
 (var state  (.then (.login client token) (aprint "login success") (athrow Error "login failed")))
 (var brain (Model))
+(require! (lit Tree-map) "ai/lib/tree")
+(var user-models (Model))
 
 (def-curried say (t noun)
   (.writes noun [t]))
+
 
 (macro def-actor (name args ...body)
        )
@@ -16,6 +19,7 @@
   (extend Event-emitter.prototype)
 
   (init (.call Event-emitter this))
+  (user-models user-models)
 
   (client client)
   (token token)
@@ -35,14 +39,17 @@
 
     (task
 
-     (print "reading")
 
-     (unless (= msg.author.name client.user.username)
+     (unless (= msg.author.username client.user.username)
+       (print "msg author" msg.author.username)
        (assign this.*channel [msg.guild.name msg.channel.name])
-       (var t (.replace msg.content
-                        (regex "[.!?]" )
-                        ))
+       (assign this.*last-user-name msg.author.username)
+       (print "channel" this.*channel)
+       (print"username" this.*last-user-name)
+
+       (var t msg.content)
        (var o (.split t (regex "\\s")))
+       (print "reads" o)
 
 
        (.emit this 'reads o)
@@ -56,6 +63,24 @@
 
   (def-generic remembers (word-list)
     (task
+
+     (.add this.brain [this.*last-user-name
+                       (dots this.*channel)])
+
+     (.train (.given this.brain
+                     [this.*last-user-name
+                      (dots this.*channel)])
+             5 word-list)
+
+
+     (.add this.brain
+           [(dots this.*channel)
+            this.*last-user-name])
+
+     (.train (.given this.brain
+                     [(dots this.*channel)
+                      this.*last-user-name])
+             5 word-list)
 
      (.train this.brain 5 word-list)
 
@@ -72,26 +97,61 @@
     (task
      ;;(unless (.some words include-ducklings-name))
 
-     (var r (.random (.given model this.context)))
+     (var self this)
+     (var r (.random (let ((channel (.given model [(dots self.*channel) ]))
+                           (user (.given model [self.*last-user-name ])))
+
+                       (print "choosing between  models"
+                              (lit channel user))
+
+                       (print "likelyhoods"
+                              self.context
+                              (.likelyhood channel [self.*last-user-name
+                                                    (dots self.context)])
+
+                              (.likelyhood user [self.*channel
+                                                 (dots self.context)])
+
+                              (.likelyhood model self.context)
+                              )
+                       (var l [(.likelyhood channel [self.*last-user-name])
+                               (.likelyhood user self.*channel)])
+
+                       (if (and (not (isNaN (first l)))
+                                (not (isNaN (second l))))
+                           (if (> (.likelyhood channel [self.*last-user-name])
+                                  (.likelyhood user self.*channel))
+
+                               (.given channel [self.*last-user-name (dots self.context)])
+
+                               (.given user [ (dots self.*channel) (dots self.context)]))
+                           (.given model self.context)))))
+     ;;(print "thought")
+
+     (print "chose" r )
      (var token (get r 'token))
      (assign this.context [(dots (rest this.context)) token])
 
-     (print "likelyhood" r.likelyhood)
-     (.catch (.resolve Promise (if (= null token)
-                                   (do (print "done thinking")
-                                       (.emit this 'thinks this.response)
-                                     (assign this.response []))
+     (print "thinking" this.context )
 
-                                   (do
+     ;;(print "likelyhood" r.likelyhood)
+     (.catch
+      (.resolve Promise
+                (if (= null token)
+                    (do (print "done thinking")
+                        (.emit this 'thinks this.response)
+                      (assign this.response []))
 
-                                    (.push this.response token)
-                                    (if (or (< r.likelyhood 0.1)
-                                            (.some ["Duckling" "duckling" "you" "your" "you're" ]
-                                                   (=> (name) (= name token))))
+                    (do
 
-                                        (do (print "thinking hard..." )
-                                          (.emit this 'remembers [model words] ))))))
-             (aprint "lost a thought...."))))
+                     (.push this.response token)
+                     (if (or (< r.likelyhood 0.1)
+                             (.some ["Duckling" "duckling" "you" "your" "you're" ]
+                                    (=> (name) (= name token))))
+
+                         (do (print "thinking hard..." )
+                             (.emit this 'remembers [model words] ))))))
+      (aprint "lost a thought...."))))
 
   (def-generic writes ( (s []) channel)
 
